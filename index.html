@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herbert — Modelmaker & 3D Artist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #1c1d23;
+            --bg-alt: #25262e;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent: #d4af37;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Hero Section with Video */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90vw;
+            max-width: 1600px;
+            aspect-ratio: 21/9;
+            max-height: 50vh;
+            overflow: hidden;
+            z-index: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) contrast(1.1);
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.6);
+            z-index: 1;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            z-index: 10;
+        }
+
+        .video-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-btn:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.3);
+            transform: scale(1.1);
+        }
+
+        .video-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin-bottom: 32px;
+            object-fit: cover;
+            box-shadow: 0 4px 24px rgba(212, 175, 55, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            padding: 12px 24px;
+            border: 2px solid var(--border);
+            border-radius: 30px;
+            color: var(--text);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 20px auto 0;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--bg);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .skill-tag {
+            padding: 10px 24px;
+            background: var(--bg-alt);
+            border-radius: 30px;
+            font-size: 0.95rem;
+            color: var(--text);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Work Section */
+        .work {
+            background: var(--bg-alt);
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .work-item {
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .work-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.15);
+        }
+
+        .work-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #2a2b33 0%, #1c1d23 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+        }
+
+        .work-content {
+            padding: 32px;
+        }
+
+        .work-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .work-item p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--bg);
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 16px 40px;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+            opacity: 1;
+        }
+
+        .contact-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-alt);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 60px 24px;
+            }
+
+            .hero-video-container {
+                width: 95vw;
+                aspect-ratio: 16/9;
+                max-height: 40vh;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-links,
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-link,
+            .contact-btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* Gallery Carousel Section */
+        .gallery {
+            background: var(--bg-alt);
+            padding: 80px 0;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .carousel-track-container {
+            overflow: hidden;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+            background: var(--bg);
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            background: transparent;
+            display: block;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28, 29, 35, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            color: var(--text);
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: rgba(28, 29, 35, 0.85);
+            backdrop-filter: blur(10px);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: -60px;
+        }
+
+        .carousel-btn.next {
+            right: -60px;
+        }
+
+        .carousel-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot:hover {
+            border-color: var(--accent);
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content,
+        .work-item,
+        .skill-tag {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .hero-content {
+            animation-delay: 0.2s;
+        }
+
+        .work-item:nth-child(1) { animation-delay: 0.1s; }
+        .work-item:nth-child(2) { animation-delay: 0.2s; }
+        .work-item:nth-child(3) { animation-delay: 0.3s; }
+        .work-item:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Mobile Responsive for Carousel */
+        @media (max-width: 768px) {
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .carousel-btn.prev {
+                left: 10px;
+            }
+
+            .carousel-btn.next {
+                right: 10px;
+            }
+
+            .carousel-image {
+                height: 300px;
+            }
+
+            .carousel-caption {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Video -->
+    <section class="hero">
+        <!-- Video Background -->
+        <div class="hero-video-container">
+            <video class="hero-video" autoplay muted loop playsinline id="heroVideo">
+                <source src="background.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="hero-video-overlay"></div>
+            
+            <!-- Play/Pause Control -->
+            <div class="video-controls">
+                <button class="video-btn" id="playPauseBtn" aria-label="Play/Pause">
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg class="pause-icon" viewBox="0 0 24 24" style="display:none">
+                        <path d="M6 4h4v16H6zm8 0h4v16h-4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <!-- Profile Image -->
+            <img src="profile-placeholder.jpg" alt="Herbert" class="profile-image">
+            
+            <h1>Herbert</h1>
+            <p>Modelmaker & 3D Artist</p>
+            
+            <div class="social-links">
+                <a href="mailto:ynik76@icloud.com" class="social-link">Email</a>
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">LinkedIn</a>
+                <a href="#" class="social-link">Behance</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <p>
+                    Based in Salzburg, Austria, I work at the intersection of physical craftsmanship and digital design. 
+                    My background in modelmaking informs everything I create — from mechanical components to generative art.
+                </p>
+                <p>
+                    With years of experience in precision modeling, 3D design, and material studies, I bring ideas to life 
+                    through a combination of traditional techniques and modern technology.
+                </p>
+                <p>
+                    When I'm not designing, you'll find me on bicycles, motorbicycles, or climbing in the Austrian Alps.
+                </p>
+                
+                <div class="skills">
+                    <span class="skill-tag">Modelmaking</span>
+                    <span class="skill-tag">3D Design</span>
+                    <span class="skill-tag">Mechanical Engineering</span>
+                    <span class="skill-tag">Generative Art</span>
+                    <span class="skill-tag">Titanium</span>
+                    <span class="skill-tag">CNC</span>
+                    <span class="skill-tag">ComfyUI</span>
+                    <span class="skill-tag">Prototyping</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section class="work" id="work">
+        <div class="container">
+            <h2 class="section-title">Selected Work</h2>
+            <div class="work-grid">
+                <div class="work-item">
+                    <img src="portfolio-pocket-clip.png" alt="Pocket Clip Design" class="work-image">
+                    <div class="work-content">
+                        <h3>Pocket Clip Design</h3>
+                        <p>Titanium pocket clip research and patent analysis. Freedom to operate confirmed for basic clip designs. Market research including LynchNW premium clips and budget alternatives.</p>
+                    </div>
+                </div>
+                
+                <div class="work-item">
+                    <img src="portfolio-3d-modeling.png" alt="3D Modeling" class="work-image">
+                    <div class="work-content">
+                        <h3>3D Modeling</h3>
+                        <p>High-precision mechanical models for prototyping and visualization. From concept sketches to production-ready 3D models with accurate tolerances.</p>
+                    </div>
+                </div>
+                
+                <div class="work-item">
+                    <img src="portfolio-materials.png" alt="Material Studies" class="work-image">
+                    <div class="work-content">
+                        <h3>Material Studies</h3>
+                        <p>Exploring titanium coatings, finishes, and surface treatments. Deep red anodizing research and practical application for premium products.</p>
+                    </div>
+                </div>
+                
+                <div class="work-item">
+                    <img src="portfolio-generative.png" alt="Generative Art" class="work-image">
+                    <div class="work-content">
+                        <h3>Generative Art</h3>
+                        <p>AI-assisted creative workflows with ComfyUI and Flux models. Product visualization, concept art, and experimental digital art.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Carousel Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Gallery</h2>
+            <div class="carousel-container">
+                <button class="carousel-btn prev" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                
+                <div class="carousel-track-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <img src="render-01.png" alt="Render 1" class="carousel-image">
+                            <p class="carousel-caption">Digital Vision #1</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="render-02.png" alt="Render 2" class="carousel-image">
+                            <p class="carousel-caption">Digital Vision #2</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="render-03.png" alt="Render 3" class="carousel-image">
+                            <p class="carousel-caption">Digital Vision #3</p>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="render-04.png" alt="Render 4" class="carousel-image">
+                            <p class="carousel-caption">Digital Vision #4</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Next">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <p>
+                    Interested in collaboration or have a project in mind? 
+                    I'm always open to discussing new opportunities and interesting challenges.
+                </p>
+                <div class="contact-links">
+                    <a href="mailto:ynik76@icloud.com" class="contact-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        Send Email
+                    </a>
+                    <a href="#" class="contact-btn secondary">View Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Herbert. Crafted in Salzburg, Austria.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Video Play/Pause Control
+        const video = document.getElementById('heroVideo');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = playPauseBtn.querySelector('.play-icon');
+        const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+
+        function updateButtonState() {
+            if (video.paused) {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            updateButtonState();
+        });
+
+        // Initialize button state
+        updateButtonState();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Carousel Functionality
+        const track = document.getElementById('carouselTrack');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.querySelector('.carousel-btn.prev');
+        const nextBtn = document.querySelector('.carousel-btn.next');
+        const dotsContainer = document.getElementById('carouselDots');
+        
+        let currentIndex = 0;
+        
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.classList.add('carousel-dot');
+            if (index === 0) dot.classList.add('active');
+            dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+        
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+        
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+        
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarousel();
+        }
+        
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+        
+        // Auto-play every 5 seconds
+        let autoPlayInterval = setInterval(nextSlide, 5000);
+        
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextSlide, 5000);
+        }
+        
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        track.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+                resetAutoPlay();
+            }
+            if (touchEndX - touchStartX > 50) {
+                prevSlide();
+                resetAutoPlay();
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoPlay();
+            }
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoPlay();
+            }
+        });
+    </script>
+</body>
+</html>
